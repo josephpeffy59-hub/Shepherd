@@ -1,54 +1,83 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8"/>
-  <title>Shepherd — Community Safety for Yaoundé</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="theme-color" content="#ffffff"/>
+  <meta name="description" content="Emergency alerts, family groups and quarter safety information for residents of Yaoundé."/>
+  <title>Shepherd — Community safety in Yaoundé</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="/css/shepherd.css"/>
+  <link rel="stylesheet" href="shepherd.css" th:href="@{/css/shepherd.css}"/>
 </head>
-<body>
-  <nav class="navbar navbar-expand-lg navbar-shepherd">
+<body class="home">
+  <nav class="navbar navbar-expand-lg navbar-shepherd" aria-label="Main navigation">
     <div class="container">
-      <a class="navbar-brand text-white fw-bold" href="/">Shepherd</a>
-      <div>
-        <a href="/quarters" class="btn btn-outline-light btn-sm me-2">Quarter Safety</a>
-        <a href="/login" class="btn btn-outline-light btn-sm me-2">Login</a>
-        <a href="/register" class="btn btn-light btn-sm fw-bold" style="color:var(--sky);">Register</a>
+      <a class="navbar-brand" href="index.html" th:href="@{/}">Shepherd</a>
+      <div class="home-links">
+        <a href="quarters.html" th:href="@{/quarters}">Quarter safety</a>
+        <a href="login.html" th:href="@{/login}">Sign in</a>
+        <a href="register.html" th:href="@{/register}" class="btn btn-shepherd">Create account</a>
       </div>
     </div>
   </nav>
 
-  <div class="container text-center" style="margin-top:10vh;">
-    <h1 class="display-3 fw-bold" style="color:var(--sky);">Shepherd</h1>
-    <p class="lead text-secondary">
-      A community-driven emergency alert platform connecting citizens of Yaoundé
-      with the police and gendarmerie in real time.
-    </p>
-    <div class="mt-4">
-      <a href="/register" class="btn btn-shepherd btn-lg me-2 px-4">Register as Citizen</a>
-      <a href="/authority-register" class="btn btn-outline-shepherd btn-lg px-4">Register as Authority</a>
-    </div>
+  <main id="main" class="container">
+    <section class="home-intro" aria-labelledby="home-title">
+      <div>
+        <p class="home-location">Yaoundé, Cameroon</p>
+        <h1 id="home-title">Community safety,<br/>in one place.</h1>
+        <p class="intro-description">Shepherd helps you send an emergency alert to local authorities, notify your family, and find safety information about your quarter.</p>
+        <div class="home-actions">
+          <a class="btn btn-shepherd" href="register.html" th:href="@{/register}">Get started</a>
+          <a href="login.html" th:href="@{/login}">Already registered? Sign in</a>
+        </div>
+      </div>
+      <aside class="getting-started" aria-labelledby="start-title">
+        <h2 id="start-title">Setting up your account</h2>
+        <ol>
+          <li>Register with your details and choose your quarter.</li>
+          <li>Add the required identification pictures.</li>
+          <li>Create a family group, or join one with an invite code.</li>
+        </ol>
+        <p>You can send alerts from your dashboard once you’re signed in.</p>
+      </aside>
+    </section>
 
-    <div class="row mt-5 justify-content-center">
-      <div class="col-md-3 mb-3">
-        <div class="card p-3">
-          <h5>🚨 One-tap Alert</h5>
-          <p class="small text-muted mb-0">Trigger a distress signal instantly.</p>
-        </div>
+    <section class="home-services" aria-labelledby="services-title">
+      <h2 id="services-title">What you can do</h2>
+      <div class="service-row">
+        <h3>Emergency alerts</h3>
+        <p>Send your current location to authorities and your family group. Allow location access in your browser when you need to send an alert.</p>
+        <a href="login.html" th:href="@{/login}">Open your account</a>
       </div>
-      <div class="col-md-3 mb-3">
-        <div class="card p-3">
-          <h5>📍 Live Map</h5>
-          <p class="small text-muted mb-0">Authorities see your exact location.</p>
-        </div>
+      <div class="service-row">
+        <h3>Quarter safety</h3>
+        <p>Look up the recorded safety rating and guidance for your quarter or municipality.</p>
+        <a href="quarters.html" th:href="@{/quarters}">View quarter guide</a>
       </div>
-      <div class="col-md-3 mb-3">
-        <div class="card p-3">
-          <h5>👨‍👩‍👧 Family Group</h5>
-          <p class="small text-muted mb-0">Link your household with one code.</p>
-        </div>
+      <div class="service-row">
+        <h3>Family groups</h3>
+        <p>Use a shared invite code to connect your household. Family alerts appear on your dashboard; enable sound to hear notifications while it’s open.</p>
+        <a href="login.html" th:href="@{/login}">Sign in to manage family</a>
       </div>
+    </section>
+
+    <section class="authority-note" aria-labelledby="authority-title">
+      <div>
+        <h2 id="authority-title">Police and gendarmerie</h2>
+        <p>Register as an authority to view incoming alerts and citizen locations in your jurisdiction.</p>
+      </div>
+      <a class="btn btn-outline-shepherd" href="authority-register.html" th:href="@{/authority-register}">Authority registration</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>Shepherd</span>
+      <span>Yaoundé, Cameroon</span>
+      <a href="login.html" th:href="@{/login}">Sign in</a>
     </div>
-  </div>
+  </footer>
+  <script src="shepherd.js" th:src="@{/js/shepherd.js}" defer></script>
 </body>
 </html>

@@ -1,27 +1,31 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="theme-color" content="#ffffff"/>
   <title>Family — Shepherd</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="/css/shepherd.css"/>
+  <link rel="stylesheet" href="shepherd.css" th:href="@{/css/shepherd.css}"/>
 </head>
 <body>
   <nav class="navbar navbar-shepherd px-3">
-    <a class="navbar-brand text-white fw-bold" href="/dashboard">Shepherd</a>
+    <a class="navbar-brand text-white fw-bold" href="user-dashboard.html" th:href="@{/dashboard}">Shepherd</a>
+    <div><a class="btn btn-outline-light btn-sm" href="user-dashboard.html" th:href="@{/dashboard}">Dashboard</a> <a class="btn btn-outline-light btn-sm" href="quarters.html" th:href="@{/quarters}">Quarter safety</a></div>
   </nav>
   <div class="container mt-4" style="max-width:600px;">
-    <h4 style="color:var(--sky);">Family Group</h4>
+    <h1>Family group</h1><p class="text-muted">Create a group for your household and share its invite code with family members.</p>
     <div th:if="${family == null}" class="card p-4 mt-3">
-      <p>You don't have a family group yet.</p>
-      <form method="post" action="/family/create">
-        <input name="name" class="form-control mb-2" placeholder="Family name" required/>
+      <p>Start your family group. Give it a name, then invite your household using your shared code.</p>
+      <form method="post" action="/family/create" th:action="@{/family/create}">
+        <label class="form-label" for="field-name">Family name</label>
+        <input name="name" class="form-control mb-2" placeholder="Family name" required id="field-name"/>
         <button class="btn btn-shepherd">Create Family</button>
       </form>
     </div>
     <div th:if="${family != null}">
       <div class="alert mt-3" style="background:var(--sky-light); color:var(--ink);">
-        Invite code: <b th:text="${family.inviteCode}"></b><br>
+        Invite code: <b id="inviteCode" th:text="${family.inviteCode}"></b><button type="button" id="copyInvite" class="btn btn-outline-shepherd btn-sm ms-3">Copy code</button><br>
         Share this code — new users can enter it when registering.
       </div>
       <h6>Members</h6>
@@ -31,5 +35,6 @@
       </ul>
     </div>
   </div>
+  <script src="shepherd.js" th:src="@{/js/shepherd.js}" defer></script>
 </body>
 </html>
