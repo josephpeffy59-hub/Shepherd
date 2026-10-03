@@ -1,0 +1,6 @@
+target/
+.vscode/
+.idea/
+*.log
+uploads/*
+!uploads/.gitkeep

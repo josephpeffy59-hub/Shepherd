@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Family — Shepherd</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/shepherd.css"/>
+</head>
+<body>
+  <nav class="navbar navbar-shepherd px-3">
+    <a class="navbar-brand text-white fw-bold" href="/dashboard">Shepherd</a>
+  </nav>
+  <div class="container mt-4" style="max-width:600px;">
+    <h4 style="color:var(--sky);">Family Group</h4>
+    <div th:if="${family == null}" class="card p-4 mt-3">
+      <p>You don't have a family group yet.</p>
+      <form method="post" action="/family/create">
+        <input name="name" class="form-control mb-2" placeholder="Family name" required/>
+        <button class="btn btn-shepherd">Create Family</button>
+      </form>
+    </div>
+    <div th:if="${family != null}">
+      <div class="alert mt-3" style="background:var(--sky-light); color:var(--ink);">
+        Invite code: <b th:text="${family.inviteCode}"></b><br>
+        Share this code — new users can enter it when registering.
+      </div>
+      <h6>Members</h6>
+      <ul class="list-group">
+        <li th:each="m : ${family.members}" class="list-group-item"
+            th:text="${m.fullName + ' (' + m.email + ')'}"></li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
