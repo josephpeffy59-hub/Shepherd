@@ -34,7 +34,7 @@
   if (!document.querySelector('.site-footer')) {
     const footer = document.createElement('footer'); footer.className = 'site-footer';
     const wrap = document.createElement('div'); wrap.className = 'container footer-inner';
-    const brand = document.createElement('strong'); brand.textContent = 'Shepherd / Community safety';
+    const brand = document.createElement('strong'); brand.textContent = 'Shepherd';
     const place = document.createElement('span'); place.textContent = 'Yaoundé, Cameroon';
     wrap.append(brand, place); footer.append(wrap); document.body.append(footer);
   }

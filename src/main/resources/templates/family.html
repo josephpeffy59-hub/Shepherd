@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="theme-color" content="#173f35"/>
+  <meta name="theme-color" content="#ffffff"/>
   <title>Family — Shepherd</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="shepherd.css" th:href="@{/css/shepherd.css}"/>
@@ -14,7 +14,7 @@
     <div><a class="btn btn-outline-light btn-sm" href="user-dashboard.html" th:href="@{/dashboard}">Dashboard</a> <a class="btn btn-outline-light btn-sm" href="quarters.html" th:href="@{/quarters}">Quarter safety</a></div>
   </nav>
   <div class="container mt-4" style="max-width:600px;">
-    <p class="eyebrow">YOUR INNER CIRCLE</p><h1>Keep your household connected.</h1><p class="text-muted">A shared family group brings emergency alerts to the people closest to you.</p>
+    <h1>Family group</h1><p class="text-muted">Create a group for your household and share its invite code with family members.</p>
     <div th:if="${family == null}" class="card p-4 mt-3">
       <p>Start your family group. Give it a name, then invite your household using your shared code.</p>
       <form method="post" action="/family/create" th:action="@{/family/create}">

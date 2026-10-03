@@ -1,6 +1,6 @@
 # Shepherd frontend
 
-The citizen, authority and administrator interfaces share forest-green colours, warm backgrounds, responsive layouts and accessible form labels. The home page introduces emergency alerts, quarter guidance and family groups, with separate registration paths for citizens and authorities.
+The citizen, authority and administrator interfaces use white backgrounds, neutral text, simple borders, system fonts, responsive layouts and accessible form labels. The home page explains emergency alerts, quarter guidance and family groups in plain language, with separate registration paths for citizens and authorities. Decorative illustrations, gradients, slogan sections and custom font downloads have been removed. Colour is limited to emergency and safety states.
 
 ## Files
 
@@ -14,7 +14,7 @@ Spring renders the `th:href` and `th:src` attributes using existing routes. Form
 
 Quarter search filters the rendered directory by text. Family groups include a copy-code button. Emergency requests show progress and request errors, prevent repeated clicks while pending, and allow cancellation without acquiring location again. Map tiles include OpenStreetMap attribution. Incoming alert names are escaped before insertion into map popups and notification markup.
 
-Bootstrap, Google Fonts, Leaflet, SockJS/STOMP and map tiles require network access. Geolocation needs a secure context or localhost. Audio notifications require the user to enable sound and keep the dashboard open.
+Bootstrap, Leaflet, SockJS/STOMP and map tiles require network access. Geolocation needs a secure context or localhost. Audio notifications require the user to enable sound and keep the dashboard open.
 
 ## Validation
 

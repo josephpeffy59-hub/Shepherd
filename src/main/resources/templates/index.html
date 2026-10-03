@@ -3,69 +3,81 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="theme-color" content="#173f35"/>
-  <meta name="description" content="Shepherd connects citizens of Yaoundé with local authorities and their families through location-based emergency alerts and quarter safety guidance."/>
-  <title>Shepherd — A safer community, together</title>
+  <meta name="theme-color" content="#ffffff"/>
+  <meta name="description" content="Emergency alerts, family groups and quarter safety information for residents of Yaoundé."/>
+  <title>Shepherd — Community safety in Yaoundé</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="shepherd.css" th:href="@{/css/shepherd.css}"/>
 </head>
 <body class="home">
-  <nav class="navbar navbar-expand-lg navbar-shepherd home-nav" aria-label="Main navigation">
+  <nav class="navbar navbar-expand-lg navbar-shepherd" aria-label="Main navigation">
     <div class="container">
-      <a class="navbar-brand" href="index.html" th:href="@{/}">Shepherd<span class="visually-hidden"> home</span></a>
+      <a class="navbar-brand" href="index.html" th:href="@{/}">Shepherd</a>
       <div class="home-links">
         <a href="quarters.html" th:href="@{/quarters}">Quarter safety</a>
-        <a href="#how-it-works" class="hide-mobile">How it works</a>
         <a href="login.html" th:href="@{/login}">Sign in</a>
-        <a href="register.html" th:href="@{/register}" class="btn btn-shepherd">Join your community <span aria-hidden="true">↗</span></a>
+        <a href="register.html" th:href="@{/register}" class="btn btn-shepherd">Create account</a>
       </div>
     </div>
   </nav>
+
   <main id="main" class="container">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <div class="location-tag">Built for Yaoundé, Cameroon</div>
-        <h1 id="hero-title">Looking out for<br/>each other.<br/><span>Closer to home.</span></h1>
-        <p>When you need help, your community should be within reach. Connect with local authorities, keep your family informed, and get to know your quarter.</p>
-        <div class="hero-actions">
-          <a class="btn btn-shepherd" href="register.html" th:href="@{/register}">Create a citizen account <span aria-hidden="true">↗</span></a>
-          <a class="btn btn-outline-shepherd" href="quarters.html" th:href="@{/quarters}">Explore quarter safety</a>
+    <section class="home-intro" aria-labelledby="home-title">
+      <div>
+        <p class="home-location">Yaoundé, Cameroon</p>
+        <h1 id="home-title">Community safety,<br/>in one place.</h1>
+        <p class="intro-description">Shepherd helps you send an emergency alert to local authorities, notify your family, and find safety information about your quarter.</p>
+        <div class="home-actions">
+          <a class="btn btn-shepherd" href="register.html" th:href="@{/register}">Get started</a>
+          <a href="login.html" th:href="@{/login}">Already registered? Sign in</a>
         </div>
-        <p class="hero-note">Serving in the police or gendarmerie? <a href="authority-register.html" th:href="@{/authority-register}">Register as an authority</a></p>
       </div>
-      <div class="hero-map">
-        <svg class="illustrated-map" viewBox="0 0 510 430" role="img" aria-label="Illustration of a connected neighbourhood in Yaoundé">
-          <defs><pattern id="blocks" width="90" height="75" patternUnits="userSpaceOnUse" patternTransform="rotate(-22)"><rect width="90" height="75" fill="#e9eee0"/><rect x="8" y="7" width="30" height="24" rx="3" fill="#dce5cf"/><rect x="44" y="7" width="36" height="24" rx="3" fill="#dfe7d3"/><rect x="8" y="39" width="72" height="26" rx="3" fill="#dfe7d3"/><path d="M0 0H90M0 0V75" stroke="#f9faf2" stroke-width="8"/></pattern></defs>
-          <rect width="510" height="430" fill="url(#blocks)"/>
-          <path d="M-20 295C95 302 90 131 219 151S309 65 525 75" fill="none" stroke="#f8faf1" stroke-width="27"/>
-          <path d="M-20 295C95 302 90 131 219 151S309 65 525 75" fill="none" stroke="#d4dcc6" stroke-width="1"/>
-          <path d="M138 -25C161 111 349 148 313 280S410 401 465 455" fill="none" stroke="#f8faf1" stroke-width="18"/>
-          <path d="M-30 392C90 330 152 367 197 274S430 224 539 154" fill="none" stroke="#bdcfd6" stroke-width="12"/>
-          <ellipse cx="401" cy="202" rx="56" ry="39" fill="#c8d8b3" transform="rotate(-25 401 202)"/>
-          <circle cx="251" cy="183" r="74" fill="#173f35" opacity=".045"/><circle cx="251" cy="183" r="48" fill="none" stroke="#173f35" stroke-opacity=".18" stroke-dasharray="4 6"/>
-          <path d="M185 118L251 183L363 253" fill="none" stroke="#6d8a52" stroke-width="2" stroke-dasharray="5 5"/>
-          <circle cx="185" cy="118" r="13" fill="#fffdf6" stroke="#819b62" stroke-width="2"/><path d="M179 119L183 123L191 114" fill="none" stroke="#547645" stroke-width="2"/>
-          <circle cx="363" cy="253" r="13" fill="#fffdf6" stroke="#819b62" stroke-width="2"/><path d="M357 254L361 258L369 249" fill="none" stroke="#547645" stroke-width="2"/>
-          <path d="M251 154C235 154 224 166 224 181C224 201 251 220 251 220S278 201 278 181C278 166 267 154 251 154" fill="#173f35"/><circle cx="251" cy="181" r="9" fill="#d7e9a3"/>
-          <text x="343" y="54" fill="#7a876f" font-size="10" font-family="sans-serif" letter-spacing="2">YAOUNDÉ</text><text x="55" y="203" fill="#7a876f" font-size="10" font-family="sans-serif">Your neighbourhood</text>
-        </svg>
-        <div class="map-top-label"><strong>A community within reach</strong><span>Citizens · families · local authorities</span></div>
-        <div class="map-card"><div class="map-card-icon" aria-hidden="true">⌖</div><div><strong>A location. A connection. A helping hand.</strong><p>Bring the people who can help closer.</p></div></div>
-        <span class="map-note">NEIGHBOURHOOD ILLUSTRATION</span>
+      <aside class="getting-started" aria-labelledby="start-title">
+        <h2 id="start-title">Setting up your account</h2>
+        <ol>
+          <li>Register with your details and choose your quarter.</li>
+          <li>Add the required identification pictures.</li>
+          <li>Create a family group, or join one with an invite code.</li>
+        </ol>
+        <p>You can send alerts from your dashboard once you’re signed in.</p>
+      </aside>
+    </section>
+
+    <section class="home-services" aria-labelledby="services-title">
+      <h2 id="services-title">What you can do</h2>
+      <div class="service-row">
+        <h3>Emergency alerts</h3>
+        <p>Send your current location to authorities and your family group. Allow location access in your browser when you need to send an alert.</p>
+        <a href="login.html" th:href="@{/login}">Open your account</a>
+      </div>
+      <div class="service-row">
+        <h3>Quarter safety</h3>
+        <p>Look up the recorded safety rating and guidance for your quarter or municipality.</p>
+        <a href="quarters.html" th:href="@{/quarters}">View quarter guide</a>
+      </div>
+      <div class="service-row">
+        <h3>Family groups</h3>
+        <p>Use a shared invite code to connect your household. Family alerts appear on your dashboard; enable sound to hear notifications while it’s open.</p>
+        <a href="login.html" th:href="@{/login}">Sign in to manage family</a>
       </div>
     </section>
-    <section class="feature-strip" aria-label="Platform features">
-      <div class="strip-item"><span class="feature-icon" aria-hidden="true">◎</span><div><strong>Help starts with an alert</strong><p>Share your location with authorities and family.</p></div></div>
-      <div class="strip-item"><span class="feature-icon" aria-hidden="true">⌖</span><div><strong>Know your quarter</strong><p>Find local safety ratings and practical guidance.</p></div></div>
-      <div class="strip-item"><span class="feature-icon" aria-hidden="true">⌂</span><div><strong>Keep family in the loop</strong><p>Connect your household with a shared invite code.</p></div></div>
+
+    <section class="authority-note" aria-labelledby="authority-title">
+      <div>
+        <h2 id="authority-title">Police and gendarmerie</h2>
+        <p>Register as an authority to view incoming alerts and citizen locations in your jurisdiction.</p>
+      </div>
+      <a class="btn btn-outline-shepherd" href="authority-register.html" th:href="@{/authority-register}">Authority registration</a>
     </section>
-    <section id="how-it-works" class="how-section" aria-labelledby="how-title">
-      <div class="section-intro"><div><p class="eyebrow">A LITTLE PREPARATION GOES A LONG WAY</p><h2 id="how-title">Get connected before<br/>you need a helping hand.</h2></div><p>A few simple steps bring your neighbourhood, your family, and local responders into one place.</p></div>
-      <div class="steps"><article class="step"><span class="step-number">01 / MAKE YOURSELF KNOWN</span><h3>Join your quarter.</h3><p>Create your account, choose your quarter, and add your identification pictures.</p></article><article class="step"><span class="step-number">02 / BRING YOUR PEOPLE CLOSER</span><h3>Connect your family.</h3><p>Create a household group or enter an invite code when registering to join an existing one.</p></article><article class="step"><span class="step-number">03 / REACH OUT WHEN IT MATTERS</span><h3>Send an emergency alert.</h3><p>From your dashboard, share your current location with local authorities and your family group.</p></article></div>
-    </section>
-    <section class="community-band" aria-labelledby="community-title"><div><p class="eyebrow">FOR THE PEOPLE WHO ANSWER THE CALL</p><h2 id="community-title">Closer to the community<br/>you serve.</h2><p>A dedicated response dashboard helps police and gendarmerie officers follow incoming alerts in their jurisdiction.</p><a href="authority-register.html" th:href="@{/authority-register}" class="btn btn-shepherd">Create an authority account <span aria-hidden="true">↗</span></a></div><div class="community-facts"><div><strong>Location on the map</strong><span>See where a citizen has requested help.</span></div><div><strong>Incoming alert notifications</strong><span>Enable sound to hear new alerts while your dashboard is open.</span></div><div><strong>Identification at hand</strong><span>Access the identification attached to an incoming alert.</span></div></div></section>
   </main>
-  <footer class="site-footer"><div class="container footer-inner"><strong>Shepherd / Community safety, closer to home.</strong><span>Yaoundé, Cameroon</span><a href="login.html" th:href="@{/login}">Access your account ↗</a></div></footer>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>Shepherd</span>
+      <span>Yaoundé, Cameroon</span>
+      <a href="login.html" th:href="@{/login}">Sign in</a>
+    </div>
+  </footer>
   <script src="shepherd.js" th:src="@{/js/shepherd.js}" defer></script>
 </body>
 </html>
