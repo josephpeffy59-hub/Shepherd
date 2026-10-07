@@ -17,10 +17,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepo.findByEmail(email)
+        String normalized = AccountValidation.normalizeEmail(email);
+        if (!AccountValidation.isValidEmail(normalized)) {
+            throw new UsernameNotFoundException("Invalid credentials");
+        }
+        return userRepo.findByEmailIgnoreCase(normalized)
                 .map(u -> (UserDetails) u)
-                .orElseGet(() -> authRepo.findByEmail(email)
+                .orElseGet(() -> authRepo.findByEmailIgnoreCase(normalized)
                         .map(a -> (UserDetails) a)
-                        .orElseThrow(() -> new UsernameNotFoundException("No account: " + email)));
+                        .orElseThrow(() -> new UsernameNotFoundException("Invalid credentials")));
     }
 }

@@ -9,5 +9,7 @@ import java.util.UUID;
 
 public interface AuthorityRepository extends JpaRepository<Authority, UUID> {
     Optional<Authority> findByEmail(String email);
+    Optional<Authority> findByEmailIgnoreCase(String email);
+    boolean existsByEmailIgnoreCase(String email);
     List<Authority> findByQuarterId(UUID quarterId);
 }

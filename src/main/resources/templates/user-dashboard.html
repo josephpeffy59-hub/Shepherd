@@ -29,132 +29,34 @@
   </div>
 
   <div class="container text-center mt-4 emergency-panel">
-    <h3>Hello, <span th:text="${userName}" style="color:var(--sky);">user</span></h3>
+    <h1>Hello, <span th:text="${userName}" style="color:var(--sky);">member</span></h1>
     <p class="text-muted">Send your current location to authorities and your family group when you need help.</p>
-    <button id="distressBtn" class="mt-2">TRIGGER ALERT</button>
-    <div id="status" class="mt-3 fw-bold" role="status" aria-live="polite" style="color:var(--sky);"></div>
+    <button id="distressBtn" class="mt-2">Send emergency alert</button>
+    <p class="small text-muted mt-3 mb-0">Location access is required to send an alert. You can cancel an active alert at any time.</p><div id="status" class="mt-3 fw-bold" role="status" aria-live="polite" style="color:var(--sky);"></div>
   </div>
 
   <div class="container mt-4 mb-5" style="max-width:800px;">
+    <dl class="account-facts"><div><dt>Your quarter</dt><dd th:text="${quarterName}">Sign in to view your quarter</dd></div><div><dt>Family group</dt><dd th:text="${familyName}">Sign in to view your household</dd></div></dl>
     <div class="section-heading"><div><h2>Your safety map</h2></div><span class="map-caption">Yaoundé, Cameroon</span></div><div id="map" aria-label="Your location and family alerts"></div>
-    <div id="familyAlerts" class="mt-3"></div>
+    <section class="dashboard-section"><div class="section-heading"><h2>Family alerts</h2><a href="family.html" th:href="@{/family}" class="small">Manage family group</a></div><p id="connectionStatus" class="connection-status" role="status">Checking live updates…</p><p id="familyAlertsEmpty" class="empty-state page-note">No family alerts to display. New household alerts will appear here while this page is open.</p><div id="familyAlerts" class="mt-3" aria-live="polite"></div></section>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script th:inline="javascript">
-    const MY_USER_ID = /*[[${userId}]]*/ '';
-    const MY_FAMILY_ID = /*[[${familyId}]]*/ '';
-
-    const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
-    const uploadPath = value => '/uploads/' + encodeURIComponent(String(value ?? ''));
-    const map = L.map('map').setView([3.8480, 11.5021], 12);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
-    let myMarker = null;
-
-    let audioCtx = null;
-    function primeAudio() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-    }
-    document.getElementById('enableSound').addEventListener('click', e => {
-      e.preventDefault();
-      primeAudio();
-      const b = document.getElementById('soundBanner');
-      b.classList.remove('alert');
-      b.classList.add('alert-success');
-      b.innerHTML = ' Sound alerts enabled.';
-    });
-
-    function playAlertSound() {
-      if (!audioCtx) return;
-      const now = audioCtx.currentTime;
-      const notes = [
-        { f: 880, t: 0.00 }, { f: 660, t: 0.25 },
-        { f: 880, t: 0.50 }, { f: 660, t: 0.75 },
-        { f: 880, t: 1.00 }, { f: 660, t: 1.25 }
-      ];
-      notes.forEach(n => {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'square';
-        osc.frequency.value = n.f;
-        gain.gain.setValueAtTime(0.35, now + n.t);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + n.t + 0.22);
-        osc.connect(gain).connect(audioCtx.destination);
-        osc.start(now + n.t);
-        osc.stop(now + n.t + 0.22);
-      });
-      if (navigator.vibrate) navigator.vibrate([400,150,400,150,400]);
-    }
-
-    const btn = document.getElementById('distressBtn');
-    const status = document.getElementById('status');
-    let active = false;
-
-    btn.addEventListener('click', async () => {
-      if (btn.disabled) return;
-      primeAudio();
-      btn.disabled = true;
-      status.textContent = active ? 'Cancelling your alert…' : 'Finding your location…';
-      try {
-        let payload = {};
-        // Cancellation must work even if location permission has since been revoked.
-        if (!active) {
-          if (!navigator.geolocation) throw new Error('Location services are unavailable in this browser.');
-          const pos = await new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }));
-          const { latitude, longitude } = pos.coords;
-          payload = { latitude, longitude };
-          if (myMarker) map.removeLayer(myMarker);
-          myMarker = L.marker([latitude, longitude]).addTo(map).bindPopup('Your location').openPopup();
-          map.setView([latitude, longitude], 15);
-          status.textContent = 'Sending your alert…';
-        }
-        const headers = { 'Content-Type': 'application/json' };
-        const csrf = document.querySelector('meta[name="_csrf"]');
-        const csrfHeader = document.querySelector('meta[name="_csrf_header"]');
-        if (csrf && csrfHeader) headers[csrfHeader.content] = csrf.content;
-        const response = await fetch(active ? '/api/alert/cancel' : '/api/alert/trigger', { method: 'POST', headers, body: JSON.stringify(payload) });
-        if (!response.ok) throw new Error('Your request could not be confirmed. Please try again.');
-        active = !active;
-        btn.textContent = active ? 'CANCEL ALERT' : 'TRIGGER ALERT';
-        btn.classList.toggle('active', active);
-        status.textContent = active ? 'Alert sent to authorities and family.' : 'Alert cancelled.';
-      } catch (error) {
-        status.textContent = error.code === 1 ? 'Allow location access in your browser to send an alert.' : error.code === 2 || error.code === 3 ? 'Your location could not be found. Please try again.' : error.message || 'Unable to send your alert. Please try again.';
-      } finally {
-        btn.disabled = false;
-      }
-    });
-
-    if (MY_FAMILY_ID && MY_FAMILY_ID !== '') {
-      const socket = new SockJS('/ws');
-      const stomp = Stomp.over(socket);
-      stomp.debug = null;
-      stomp.connect({}, () => {
-        stomp.subscribe('/topic/family/' + MY_FAMILY_ID, msg => {
-          const a = JSON.parse(msg.body);
-          if (String(a.userId) === String(MY_USER_ID)) return;
-          if (a.cancel) {
-            document.getElementById('familyAlerts').innerHTML = '';
-            return;
-          }
-          if (!Number.isFinite(a.lat) || !Number.isFinite(a.lng)) return;
-          playAlertSound();
-          document.getElementById('familyAlerts').innerHTML =
-            `<div class="alert alert-danger">
-                <b>${escapeHtml(a.userName)}</b> (family) triggered an alert in
-               <b>${escapeHtml(a.quarter)}</b> at ${new Date().toLocaleTimeString()}.
-               <br><small>Location: ${a.lat.toFixed(5)}, ${a.lng.toFixed(5)}</small>
-             </div>`;
-          const marker = L.marker([a.lat, a.lng]).addTo(map);
-          marker.bindPopup(`<b>Family alert: ${escapeHtml(a.userName)}</b>`).openPopup();
-          map.setView([a.lat, a.lng], 15);
-        });
-      });
-    }
+    window.shepherdCitizen = {
+      userId: /*[[${userId}]]*/ '',
+      familyId: /*[[${familyId}]]*/ '',
+      active: /*[[${hasActiveAlert}]]*/ false,
+      latitude: /*[[${initialLat}]]*/ null,
+      longitude: /*[[${initialLng}]]*/ null
+    };
   </script>
+
+  <script src="safety.js" th:src="@{/js/safety.js}" defer></script>
+  <script src="citizen-dashboard.js" th:src="@{/js/citizen-dashboard.js}" defer></script>
+  <footer class="site-footer"><div class="container footer-inner"><span>Shepherd · Community safety</span><span>Yaoundé, Cameroon</span><a href="quarters.html" th:href="@{/quarters}">Quarter safety guide</a></div></footer>
   <script src="shepherd.js" th:src="@{/js/shepherd.js}" defer></script>
 </body>
 </html>

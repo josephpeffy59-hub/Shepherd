@@ -7,6 +7,7 @@ import com.crowdguard.repository.AlertRepository;
 import com.crowdguard.repository.AuthorityRepository;
 import com.crowdguard.repository.QuarterRepository;
 import com.crowdguard.repository.UserRepository;
+import com.crowdguard.service.AlertService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -39,6 +40,12 @@ public class DashboardController {
         m.addAttribute("userName", u.getFullName());
         m.addAttribute("userId", u.getId().toString());
         m.addAttribute("familyId", u.getFamily() != null ? u.getFamily().getId().toString() : "");
+        m.addAttribute("quarterName", u.getQuarter() == null ? "Not assigned" : u.getQuarter().getName());
+        m.addAttribute("familyName", u.getFamily() == null ? "No family group yet" : u.getFamily().getName());
+        var activeAlerts = alertRepo.findByUserIdAndStatusOrderByTimestampDesc(u.getId(), AlertStatus.ACTIVE);
+        m.addAttribute("hasActiveAlert", !activeAlerts.isEmpty());
+        m.addAttribute("initialLat", activeAlerts.isEmpty() ? null : activeAlerts.get(0).getLatitude());
+        m.addAttribute("initialLng", activeAlerts.isEmpty() ? null : activeAlerts.get(0).getLongitude());
         return "user-dashboard";
     }
 
@@ -47,7 +54,8 @@ public class DashboardController {
         Authority a = authorityRepo.findByEmail(auth.getName()).orElseThrow();
         m.addAttribute("authority", a);
         m.addAttribute("quarters", quarterRepo.findAll());
-        m.addAttribute("activeAlerts", alertRepo.findByStatusOrderByTimestampDesc(AlertStatus.ACTIVE));
+        m.addAttribute("activeAlerts", alertRepo.findByUserQuarterIdAndStatusOrderByTimestampDesc(a.getQuarter().getId(), AlertStatus.ACTIVE)
+                .stream().map(AlertService::alertPayload).toList());
         return "authority-dashboard";
     }
 }

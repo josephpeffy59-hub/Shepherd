@@ -36,6 +36,18 @@ public class AlertService {
         user.setHasActiveAlert(true);
         userRepo.save(user);
 
+        Map<String, Object> payload = alertPayload(a);
+
+        ws.convertAndSend("/topic/alerts", payload);
+        if (user.getFamily() != null) {
+            ws.convertAndSend("/topic/family/" + user.getFamily().getId(), payload);
+        }
+        return a;
+    }
+
+    // Only send the fields needed by responders; never serialize account entities.
+    public static Map<String, Object> alertPayload(Alert a) {
+        User user = a.getUser();
         Map<String, Object> payload = new HashMap<>();
         payload.put("alertId", a.getId().toString());
         payload.put("userId", user.getId().toString());
@@ -43,20 +55,13 @@ public class AlertService {
         payload.put("userEmail", user.getEmail());
         payload.put("quarter", user.getQuarter() != null ? user.getQuarter().getName() : "Unknown");
         payload.put("quarterId", user.getQuarter() != null ? user.getQuarter().getId().toString() : "");
-        payload.put("lat", lat);
-        payload.put("lng", lng);
+        payload.put("lat", a.getLatitude());
+        payload.put("lng", a.getLongitude());
+        payload.put("timestamp", a.getTimestamp() == null ? null : a.getTimestamp().toString());
         payload.put("idPicture1", user.getIdPicturePath1());
         payload.put("idPicture2", user.getIdPicturePath2());
 
-        // Notify authorities
-        ws.convertAndSend("/topic/alerts", payload);
-
-        // Notify family members
-        if (user.getFamily() != null) {
-            ws.convertAndSend("/topic/family/" + user.getFamily().getId(), payload);
-        }
-
-        return a;
+        return payload;
     }
 
     @Transactional
@@ -64,17 +69,18 @@ public class AlertService {
         user.setHasActiveAlert(false);
         userRepo.save(user);
 
-        alertRepo.findByStatusOrderByTimestampDesc(AlertStatus.ACTIVE).stream()
-                .filter(a -> a.getUser().getId().equals(user.getId()))
+        alertRepo.findByUserIdAndStatusOrderByTimestampDesc(user.getId(), AlertStatus.ACTIVE).stream()
                 .forEach(a -> {
                     a.setStatus(AlertStatus.RESOLVED);
                     alertRepo.save(a);
                 });
 
+        Map<String, Object> cancelPayload = new HashMap<>();
+        cancelPayload.put("cancel", true);
+        cancelPayload.put("userId", user.getId().toString());
+        cancelPayload.put("quarterId", user.getQuarter() == null ? "" : user.getQuarter().getId().toString());
+        ws.convertAndSend("/topic/alerts", cancelPayload);
         if (user.getFamily() != null) {
-            Map<String, Object> cancelPayload = new HashMap<>();
-            cancelPayload.put("cancel", true);
-            cancelPayload.put("userId", user.getId().toString());
             ws.convertAndSend("/topic/family/" + user.getFamily().getId(), cancelPayload);
         }
     }

@@ -21,10 +21,12 @@ public class UserService {
     private final FamilyRepository familyRepo;
     private final PasswordEncoder encoder;
     private final FileStorageService fileStorage;
+    private final AccountValidation accountValidation;
 
     public User register(String fullName, String email, String rawPassword,
                          UUID quarterId, MultipartFile id1, MultipartFile id2,
                          String inviteCode) {
+        email = accountValidation.validateRegistration(email, rawPassword);
         Quarter q = quarterRepo.findById(quarterId).orElseThrow();
         User u = User.builder()
                 .fullName(fullName)

@@ -40,6 +40,6 @@ public class AdminController {
             q.setDescription(description);
             quarterRepo.save(q);
         });
-        return "redirect:/admin/dashboard";
+        return "redirect:/admin/dashboard?saved";
     }
 }

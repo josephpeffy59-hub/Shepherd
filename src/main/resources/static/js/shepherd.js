@@ -1,5 +1,36 @@
 (() => {
   'use strict';
+  document.querySelectorAll('[data-auth-form]').forEach(form => {
+    const email = form.querySelector('input[type="email"]');
+    const password = form.querySelector('input[autocomplete="new-password"]');
+    const emailPattern = /^[A-Za-z0-9]+(?:[._%+\-][A-Za-z0-9]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9\-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,63}$/;
+    function validateEmail() {
+      const value = email.value.trim();
+      const at = value.indexOf('@');
+      email.setCustomValidity(value && (!emailPattern.test(value) || value.length > 254 || at > 64)
+        ? 'Enter a valid email address, such as name@example.com.' : '');
+    }
+    function validatePassword() {
+      const value = password.value;
+      password.setCustomValidity(value && (value.length < 7 || !value.trim())
+        ? 'Your password must contain at least 7 characters and cannot be only spaces.'
+        : new TextEncoder().encode(value).length > 72 ? 'Your password is too long. Please use a shorter password.' : '');
+    }
+    if (email) {
+      email.addEventListener('input', validateEmail);
+      email.addEventListener('blur', () => { email.value = email.value.trim(); validateEmail(); });
+      validateEmail();
+    }
+    if (password) {
+      password.addEventListener('input', validatePassword);
+      validatePassword();
+    }
+    form.addEventListener('submit', event => {
+      if (email) { email.value = email.value.trim(); validateEmail(); }
+      if (password) validatePassword();
+      if (!form.checkValidity()) { event.preventDefault(); form.reportValidity(); }
+    });
+  });
   const search = document.getElementById('quarterSearch');
   if (search) search.addEventListener('input', () => {
     const query = search.value.trim().toLocaleLowerCase();
@@ -39,13 +70,13 @@
     wrap.append(brand, place); footer.append(wrap); document.body.append(footer);
   }
   // Unprocessed Thymeleaf attributes identify a static preview.
-  if (document.querySelector('[th\\:if], [th\\:each]')) {
+  if (document.body.hasAttribute('data-static-preview') || document.querySelector('[th\\:if], [th\\:each]')) {
     const banner = document.createElement('p'); banner.className = 'preview-banner';
     banner.textContent = 'Design preview — account data, registration and live alerts require the Shepherd server.';
     document.querySelector('nav').after(banner);
     const emergencyButton = document.getElementById('distressBtn');
     if (emergencyButton) { emergencyButton.disabled = true; emergencyButton.title = 'Live alerts require the Shepherd server.'; }
-    document.querySelectorAll('[th\\:if], [th\\:each]').forEach(el => { el.hidden = true; });
+    document.querySelectorAll('[th\\:if], [th\\:each]').forEach(el => { el.hidden = !el.hasAttribute('data-preview-visible'); });
     document.querySelectorAll('form').forEach(form => form.addEventListener('submit', event => {
       event.preventDefault(); banner.textContent = 'Connect these templates to the Shepherd server to use this form.';
       banner.scrollIntoView({ behavior: 'smooth', block: 'center' });

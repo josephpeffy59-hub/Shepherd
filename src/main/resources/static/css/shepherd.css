@@ -144,3 +144,55 @@ button, a, input, select { touch-action: manipulation; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
+
+/* A little definition without a decorative landing-page treatment. */
+body { background: #fafafa; }
+.navbar-brand::before { content: "S"; display: inline-grid; place-items: center; width: 28px; height: 28px; margin-right: 9px; border-radius: 5px; background: #30343b; color: #fff; font-size: 16px; }
+.navbar-brand { display: inline-flex; align-items: center; }
+.navbar-shepherd { box-shadow: 0 1px 3px #00000003; }
+.btn { border-radius: 6px; }
+.btn-shepherd { background: #30343b; border-color: #30343b; }
+.home-intro { padding-top: 48px; padding-bottom: 40px; }
+.home-location { font-size: 13px; }
+.getting-started { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 24px; }
+.home-services { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 24px; }
+.home-services > h2 { font-size: 20px; }
+.service-row:last-child { padding-bottom: 0; }
+.authority-note { border: 0; padding-top: 32px; }
+.home-faq { border-top: 1px solid var(--line); padding-top: 24px; }
+.home-faq h2 { font-size: 20px; }
+.home-faq details { padding: 12px 0; border-bottom: 1px solid var(--line); }
+.home-faq summary { font-size: 14px; font-weight: 500; cursor: pointer; }
+.home-faq details p { max-width: 760px; color: var(--muted); font-size: 14px; margin: 12px 0 0; }
+.auth-page > .container { max-width: 580px !important; }
+.card, .page-note { border-radius: 8px; }
+.auth-card { border: 1px solid var(--line); box-shadow: 0 3px 14px #00000004; }
+.auth-card.p-4 { padding: 30px !important; }
+.form-section-title { margin: 24px 0 6px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 16px; }
+.page-note { padding: 18px 20px; border: 1px solid var(--line); background: #fff; font-size: 14px; }
+.page-note p:last-child { margin-bottom: 0; }
+.account-facts { display: flex; flex-wrap: wrap; gap: 24px; margin: 20px 0; }
+.account-facts div { flex: 1; min-width: 180px; padding: 16px 20px; background: #fff; border: 1px solid var(--line); border-radius: 8px; }
+.account-facts dt { font-size: 12px; color: var(--muted); font-weight: 400; margin-bottom: 4px; }
+.account-facts dd { font-size: 15px; font-weight: 500; margin: 0; }
+.emergency-panel { background: #fff; border: 1px solid var(--line); border-radius: 8px; margin-top: 28px !important; }
+.connection-status { font-size: 13px; color: var(--muted); margin: 0; }
+.dashboard-section { margin-top: 28px; }
+.dashboard-section > h2 { font-size: 21px; margin-bottom: 12px; }
+.stat-value { font-size: 28px; font-weight: 600; margin-top: 6px; }
+.site-footer { background: #fff; }
+#map { border-radius: 8px; }
+#alerts .list-group-item { margin-bottom: 10px; border: 1px solid var(--line); border-left: 3px solid #b33434; border-radius: 6px; }
+#familyAlerts .alert { margin-bottom: 12px; }
+.family-name { margin-top: 28px; font-size: 22px; }
+.invite-panel { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.invite-panel code { color: var(--ink); font-size: 18px; letter-spacing: 1px; }
+.table caption { caption-side: top; padding: 12px 18px; font-size: 13px; color: var(--muted); }
+@media (max-width: 700px) {
+  .home-intro { padding-top: 30px; }
+  .getting-started, .home-services { padding: 20px; }
+  .auth-card.p-4 { padding: 22px !important; }
+  .emergency-panel { width: calc(100% - 40px); }
+  .account-facts { gap: 12px; }
+  .navbar-brand { font-size: 19px; }
+}
