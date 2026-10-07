@@ -18,9 +18,11 @@ public class AuthorityService {
     private final AuthorityRepository repo;
     private final QuarterRepository quarterRepo;
     private final PasswordEncoder encoder;
+    private final AccountValidation accountValidation;
 
     public Authority register(String fullName, String email, String rawPassword,
                               String badge, AuthorityType type, UUID quarterId) {
+        email = accountValidation.validateRegistration(email, rawPassword);
         Quarter q = quarterRepo.findById(quarterId).orElseThrow();
         Authority a = Authority.builder()
                 .fullName(fullName)

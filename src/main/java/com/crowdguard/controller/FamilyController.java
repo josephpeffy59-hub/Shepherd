@@ -3,6 +3,7 @@ package com.crowdguard.controller;
 import com.crowdguard.model.User;
 import com.crowdguard.repository.UserRepository;
 import com.crowdguard.service.FamilyService;
+import com.crowdguard.service.RegistrationValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -25,9 +26,15 @@ public class FamilyController {
     }
 
     @PostMapping("/create")
-    public String create(@RequestParam String name, Authentication auth) {
+    public String create(@RequestParam String name, Authentication auth, Model model) {
         User u = userRepo.findByEmail(auth.getName()).orElseThrow();
-        familyService.createFamily(u, name);
-        return "redirect:/family";
+        try {
+            familyService.createFamily(u, name);
+            return "redirect:/family?created";
+        } catch (RegistrationValidationException e) {
+            model.addAttribute("familyError", e.getErrors().get("family"));
+            model.addAttribute("family", u.getFamily());
+            return "family";
+        }
     }
 }

@@ -16,9 +16,9 @@
   <div class="container mt-4 mb-5">
     <h1>Quarter safety guide</h1>
     <p class="text-muted">Explore the recorded safety ratings and local guidance for quarters across Yaoundé.</p>
-    <div class="directory-tools"><label for="quarterSearch">Find a quarter</label><input id="quarterSearch" type="search" class="form-control" placeholder="Search by quarter or municipality"/><div class="rating-legend"><span class="badge-safe">Safe</span><span class="badge-moderate">Moderate</span><span class="badge-dangerous">Dangerous</span></div></div><div class="card p-0 table-responsive">
+    <div class="directory-tools"><label for="quarterSearch">Find a quarter</label><input id="quarterSearch" type="search" class="form-control" placeholder="Search by quarter or municipality"/><div class="rating-legend"><span class="badge-safe">Safe</span><span class="badge-moderate">Moderate</span><span class="badge-dangerous">Dangerous</span></div></div><p class="small text-muted">Ratings are maintained by the platform administrator. They provide guidance and cannot guarantee current conditions.</p><p th:if="${quarters.isEmpty()}" class="empty-state page-note">No quarter guidance has been published yet. Please check again later.</p><div class="card p-0 table-responsive">
       <table class="table table-hover mb-0">
-        <thead class="table-light">
+        <caption>Quarter ratings and local notes</caption><thead class="table-light">
           <tr><th>Quarter</th><th>Municipality</th><th>Rating</th><th>Notes</th></tr>
         </thead>
         <tbody>
@@ -36,6 +36,7 @@
       </table><p id="searchEmpty" class="empty-state" hidden>No quarters match your search.</p>
     </div>
   </div>
+  <footer class="site-footer"><div class="container footer-inner"><span>Shepherd · Community safety</span><span>Yaoundé, Cameroon</span><a href="quarters.html" th:href="@{/quarters}">Quarter safety guide</a></div></footer>
   <script src="shepherd.js" th:src="@{/js/shepherd.js}" defer></script>
 </body>
 </html>

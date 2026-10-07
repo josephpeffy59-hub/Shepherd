@@ -16,26 +16,31 @@
   <div class="container mt-4 mb-5" style="max-width:600px;">
     <div class="card p-4 auth-card">
       <h1 class="auth-title">Register as an authority</h1><p class="text-muted mb-4">Register your service details and the quarter you serve.</p>
-      <form method="post" action="/authority-register" th:action="@{/authority-register}">
-        <label class="form-label" for="field-fullName">Full Name</label>
-        <input name="fullName" class="form-control mb-2" placeholder="Full Name" required id="field-fullName"/>
+      <div th:if="${validationErrors != null}" class="alert alert-danger" role="alert">
+        <strong>Please correct the following:</strong>
+        <ul class="mb-0"><li th:each="error : ${validationErrors.values()}" th:text="${error}"></li></ul>
+      </div>
+      <form data-auth-form="true" method="post" action="/authority-register" th:action="@{/authority-register}">
+        <h2 class="form-section-title">Your details</h2><label class="form-label" for="field-fullName">Full Name</label>
+        <input name="fullName" class="form-control mb-2" placeholder="Full Name" required id="field-fullName" th:value="${fullName}"/>
         <label class="form-label" for="field-email">Email</label>
-        <input autocomplete="email" name="email" type="email" class="form-control mb-2" placeholder="Email" required id="field-email"/>
+        <input autocomplete="email" name="email" type="email" class="form-control mb-2" placeholder="Email" required id="field-email" th:value="${email}"/>
         <label class="form-label" for="field-password">Password</label>
-        <input autocomplete="new-password" name="password" type="password" class="form-control mb-2" placeholder="Password" required id="field-password"/>
-        <label class="form-label" for="field-badgeNumber">Badge Number</label>
-        <input name="badgeNumber" class="form-control mb-2" placeholder="Badge Number" required id="field-badgeNumber"/>
+        <input autocomplete="new-password" name="password" type="password" class="form-control mb-2" placeholder="Password" required id="field-password" minlength="7" maxlength="72" aria-describedby="passwordHelp"/>
+        <p id="passwordHelp" class="small text-muted">Use at least 7 characters. Passwords cannot be only spaces.</p>
+        <h2 class="form-section-title">Service details</h2><label class="form-label" for="field-badgeNumber">Badge Number</label>
+        <input name="badgeNumber" class="form-control mb-2" placeholder="Badge Number" required id="field-badgeNumber" th:value="${badgeNumber}"/>
 
         <label class="form-label" for="field-type">Service</label>
         <select name="type" class="form-select mb-2" required id="field-type">
-          <option value="POLICE">Police</option>
-          <option value="GENDARMERIE">Gendarmerie</option>
+          <option value="POLICE" th:selected="${selectedType == null or selectedType.name() == 'POLICE'}">Police</option>
+          <option value="GENDARMERIE" th:selected="${selectedType != null and selectedType.name() == 'GENDARMERIE'}">Gendarmerie</option>
         </select>
 
         <label class="form-label" for="field-quarterId">Jurisdiction quarter</label>
         <select name="quarterId" class="form-select mb-3" required id="field-quarterId">
           <option value="">Jurisdiction quarter</option>
-          <option th:each="q : ${quarters}" th:value="${q.id}"
+          <option th:each="q : ${quarters}" th:value="${q.id}" th:selected="${q.id == quarterId}"
                   th:text="${q.name + ' — ' + q.municipality}"></option>
         </select>
 
@@ -43,6 +48,7 @@
       </form><p class="auth-switch">Already have an account? <a href="login.html" th:href="@{/login}">Sign in</a></p>
     </div>
   </div>
+  <footer class="site-footer"><div class="container footer-inner"><span>Shepherd · Community safety</span><span>Yaoundé, Cameroon</span><a href="quarters.html" th:href="@{/quarters}">Quarter safety guide</a></div></footer>
   <script src="shepherd.js" th:src="@{/js/shepherd.js}" defer></script>
 </body>
 </html>

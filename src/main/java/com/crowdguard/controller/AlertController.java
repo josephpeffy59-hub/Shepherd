@@ -21,6 +21,12 @@ public class AlertController {
 
     @PostMapping("/trigger")
     public ResponseEntity<?> trigger(@RequestBody Map<String, Double> body, Authentication auth) {
+        Double lat = body.get("latitude");
+        Double lng = body.get("longitude");
+        if (lat == null || lng == null || !Double.isFinite(lat) || !Double.isFinite(lng)
+                || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+            return ResponseEntity.badRequest().body(Map.of("error", "A valid location is required to send an alert."));
+        }
         User u = userRepo.findByEmail(auth.getName()).orElseThrow();
         Alert a = alertService.trigger(u, body.get("latitude"), body.get("longitude"));
         return ResponseEntity.ok(Map.of("alertId", a.getId().toString()));

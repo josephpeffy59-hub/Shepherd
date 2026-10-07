@@ -11,20 +11,20 @@
 <body>
   <nav class="navbar navbar-shepherd px-3">
     <span class="navbar-brand text-white fw-bold">Shepherd — Admin</span>
-    <form action="/logout" th:action="@{/logout}" method="post">
+    <div><a href="quarters.html" th:href="@{/quarters}" class="btn btn-outline-light btn-sm me-2">View quarter guide</a><form class="d-inline" action="/logout" th:action="@{/logout}" method="post">
       <button class="btn btn-light btn-sm fw-bold" style="color:var(--sky);">Logout</button>
-    </form>
+    </form></div>
   </nav>
   <div class="container mt-4 mb-5">
-    <h1>Community overview</h1><p class="text-muted mb-4">Manage quarter guidance and review your platform totals.</p>
+    <h1>Community overview</h1><div th:if="${param.saved}" class="alert alert-success" role="status">Quarter guidance saved.</div><p class="text-muted mb-4">Manage quarter guidance and review your platform totals.</p>
     <div class="row mb-4">
-      <div class="col-md-3 mb-2"><div class="card p-3 text-center"><b>Users</b><div class="fs-3" th:text="${users.size()}"></div></div></div>
-      <div class="col-md-3 mb-2"><div class="card p-3 text-center"><b>Authorities</b><div class="fs-3" th:text="${authorities.size()}"></div></div></div>
-      <div class="col-md-3 mb-2"><div class="card p-3 text-center"><b>Alerts</b><div class="fs-3" th:text="${alerts.size()}"></div></div></div>
-      <div class="col-md-3 mb-2"><div class="card p-3 text-center"><b>Quarters</b><div class="fs-3" th:text="${quarters.size()}"></div></div></div>
+      <div class="col-md-3 mb-2"><div class="card p-3 text-center"><b>Users</b><div class="stat-value" th:text="${users.size()}"></div></div></div>
+      <div class="col-md-3 mb-2"><div class="card p-3 text-center"><b>Authorities</b><div class="stat-value" th:text="${authorities.size()}"></div></div></div>
+      <div class="col-md-3 mb-2"><div class="card p-3 text-center"><b>Alerts</b><div class="stat-value" th:text="${alerts.size()}"></div></div></div>
+      <div class="col-md-3 mb-2"><div class="card p-3 text-center"><b>Quarters</b><div class="stat-value" th:text="${quarters.size()}"></div></div></div>
     </div>
 
-    <h5 style="color:var(--sky);">Update Quarter Safety</h5>
+    <h2>Quarter guidance</h2><p class="text-muted small">Update each quarter’s rating and notes, then select Save. Changes appear in the public safety guide.</p><p th:if="${quarters.isEmpty()}" class="empty-state page-note">No quarters are available to edit.</p>
     <div class="card p-0 table-responsive">
       <table class="table mb-0">
         <thead class="table-light">
@@ -41,14 +41,18 @@
                           th:selected="${r == q.safetyRating}"></option>
                 </select>
             </td>
-            <td><input aria-label="Quarter description" th:attr="form=${'quarter-form-' + q.id}" name="description" class="form-control form-control-sm" th:value="${q.description}"/></td>
+            <td><input aria-label="Quarter description" th:attr="form=${'quarter-form-' + q.id}" name="description" maxlength="1000" class="form-control form-control-sm" th:value="${q.description}"/></td>
             <td><button th:attr="form=${'quarter-form-' + q.id}" class="btn btn-sm btn-shepherd">Save</button></td>
 
           </tr>
         </tbody>
       </table>
     </div>
+
+    <section class="dashboard-section"><h2>Registered authorities</h2><p th:if="${authorities.isEmpty()}" class="empty-state page-note">No authority accounts have been registered.</p><div class="card table-responsive"><table class="table mb-0"><thead><tr><th>Name</th><th>Service</th><th>Jurisdiction</th><th>Email</th></tr></thead><tbody><tr th:each="officer : ${authorities}"><td th:text="${officer.fullName}"></td><td th:text="${officer.type}"></td><td th:text="${officer.quarter != null ? officer.quarter.name : 'Not assigned'}"></td><td th:text="${officer.email}"></td></tr></tbody></table></div></section>
+    <section class="dashboard-section"><h2>Alert records</h2><p th:if="${alerts.isEmpty()}" class="empty-state page-note">No alerts have been recorded.</p><div class="card table-responsive"><table class="table mb-0"><thead><tr><th>Citizen</th><th>Quarter</th><th>Status</th><th>Recorded at</th></tr></thead><tbody><tr th:each="alert : ${alerts}"><td th:text="${alert.user.fullName}"></td><td th:text="${alert.user.quarter != null ? alert.user.quarter.name : 'Not assigned'}"></td><td th:text="${alert.status}"></td><td th:text="${#temporals.format(alert.timestamp, 'dd MMM yyyy, HH:mm')}"></td></tr></tbody></table></div></section>
   </div>
+  <footer class="site-footer"><div class="container footer-inner"><span>Shepherd · Community safety</span><span>Yaoundé, Cameroon</span><a href="quarters.html" th:href="@{/quarters}">Quarter safety guide</a></div></footer>
   <script src="shepherd.js" th:src="@{/js/shepherd.js}" defer></script>
 </body>
 </html>

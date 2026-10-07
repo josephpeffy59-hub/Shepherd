@@ -9,4 +9,6 @@ import java.util.UUID;
 
 public interface AlertRepository extends JpaRepository<Alert, UUID> {
     List<Alert> findByStatusOrderByTimestampDesc(AlertStatus status);
+    List<Alert> findByUserIdAndStatusOrderByTimestampDesc(UUID userId, AlertStatus status);
+    List<Alert> findByUserQuarterIdAndStatusOrderByTimestampDesc(UUID quarterId, AlertStatus status);
 }

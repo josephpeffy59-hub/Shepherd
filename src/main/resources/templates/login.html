@@ -17,8 +17,8 @@
     <div class="card p-4 auth-card">
       <h1 class="auth-title">Sign in</h1><p class="text-muted mb-4">Sign in to access your community safety account.</p>
       <div th:if="${param.registered}" class="alert alert-success">Registered! Please log in.</div>
-      <div th:if="${param.error}" class="alert alert-danger">Invalid email or password.</div>
-      <form method="post" action="/login" th:action="@{/login}">
+      <div th:if="${param.error}" class="alert alert-danger" role="alert">Invalid email or password.</div>
+      <form data-auth-form="true" method="post" action="/login" th:action="@{/login}">
         <label class="form-label" for="field-username">Email</label>
         <input autocomplete="email" type="email" name="username" class="form-control mb-2" placeholder="Email" required id="field-username"/>
         <label class="form-label" for="field-password">Password</label>
@@ -28,6 +28,7 @@
       <a href="register.html" th:href="@{/register}" class="d-block mt-3 text-center" style="color:var(--sky);">Create account</a>
     </div>
   </div>
+  <footer class="site-footer"><div class="container footer-inner"><span>Shepherd · Community safety</span><span>Yaoundé, Cameroon</span><a href="quarters.html" th:href="@{/quarters}">Quarter safety guide</a></div></footer>
   <script src="shepherd.js" th:src="@{/js/shepherd.js}" defer></script>
 </body>
 </html>
